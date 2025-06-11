@@ -15,8 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GHRepoViewModel @Inject constructor(
-    private val GHRepoRepository: GHRepoRepository,
-    private val ghRepoListMapper:GHRepoListMapper
+    private val GHRepoRepository: GHRepoRepository, private val ghRepoListMapper: GHRepoListMapper
 ) : ViewModel() {
 
     private val _user = MutableStateFlow<ApiState<List<GHRepo>>>(ApiState.Loading)
@@ -34,7 +33,7 @@ class GHRepoViewModel @Inject constructor(
                 }
 
                 is Result.Success -> {
-                    _user.emit(ApiState.Success(ghRepoListMapper.map(it.data.items)))
+                    _user.emit(ApiState.Success(ghRepoListMapper.map(it.data)))
                 }
             }
         }

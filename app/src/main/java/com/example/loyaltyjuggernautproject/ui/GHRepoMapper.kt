@@ -2,11 +2,11 @@ package com.example.loyaltyjuggernautproject.ui
 
 import com.example.loyaltyjuggernautproject.core.Mapper
 import com.example.loyaltyjuggernautproject.core.NullableInputListMapper
-import com.example.loyaltyjuggernautproject.data.remote.networkmodel.GHRepoResponse
+import com.example.loyaltyjuggernautproject.data.local.entity.GHRepoEntity
 import javax.inject.Inject
 
-class GHRepoMapper @Inject constructor() : Mapper<GHRepoResponse, GHRepo> {
-    override fun map(input: GHRepoResponse): GHRepo {
+class GHRepoMapper @Inject constructor() : Mapper<GHRepoEntity, GHRepo> {
+    override fun map(input: GHRepoEntity): GHRepo {
         return GHRepo(
             id = input.id, name = input.name, repoURL = input.html_url
         )
@@ -15,8 +15,8 @@ class GHRepoMapper @Inject constructor() : Mapper<GHRepoResponse, GHRepo> {
 
 class GHRepoListMapper @Inject constructor(
     private val ghRepoMapper: GHRepoMapper
-) : NullableInputListMapper<GHRepoResponse, GHRepo> {
-    override fun map(input: List<GHRepoResponse>?): List<GHRepo> {
+) : NullableInputListMapper<GHRepoEntity, GHRepo> {
+    override fun map(input: List<GHRepoEntity>?): List<GHRepo> {
         return input?.map { ghRepoMapper.map(it) }.orEmpty()
     }
 }

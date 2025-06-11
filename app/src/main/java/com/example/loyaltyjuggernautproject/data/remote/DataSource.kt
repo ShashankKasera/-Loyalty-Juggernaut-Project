@@ -8,4 +8,7 @@ interface DataSource {
 
     @GET("repositories?q=language:swift&sort=stars&order=desc")
     suspend fun getGHRepo(): Response<GHRepoData>
+
+    @GET("repositories?q=language:swift&sort=stars&order=desc")
+    suspend fun test(): GHRepoData
 }
