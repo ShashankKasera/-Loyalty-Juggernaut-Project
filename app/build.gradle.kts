@@ -58,5 +58,28 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //room
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
+    //dagger hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+
+    //ktx
+    implementation(libs.androidx.activity.ktx)
+
+    //MVVM
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+
+    //coroutines
+    implementation(libs.kotlinx.coroutines.android)
+
+    //retrofit
+    implementation(libs.retrofit)
+
+    //gson
+    implementation(libs.gson)
 }
