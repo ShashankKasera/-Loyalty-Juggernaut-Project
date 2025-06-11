@@ -1,7 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.devtool.ksp)
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -22,8 +23,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -54,8 +54,8 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     //dagger hilt
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.android.v2562)
+    ksp(libs.hilt.android.compiler)
 
     //ktx
     implementation(libs.androidx.activity.ktx)
@@ -69,7 +69,5 @@ dependencies {
 
     //retrofit
     implementation(libs.retrofit)
-
-    //gson
-    implementation(libs.gson)
+    implementation(libs.converter.gson)
 }

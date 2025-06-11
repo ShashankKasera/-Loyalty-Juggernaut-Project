@@ -1,0 +1,3 @@
+package com.example.loyaltyjuggernautproject.data.remote.networkmodel
+
+class UserResponse
