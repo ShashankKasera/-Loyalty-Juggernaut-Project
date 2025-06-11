@@ -1,7 +1,6 @@
 package com.example.loyaltyjuggernautproject.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -13,24 +12,22 @@ import com.example.loyaltyjuggernautproject.R
 import com.example.loyaltyjuggernautproject.core.gone
 import com.example.loyaltyjuggernautproject.core.states.ApiState
 import com.example.loyaltyjuggernautproject.core.visible
-import com.example.loyaltyjuggernautproject.data.remote.networkmodel.User
-import com.example.loyaltyjuggernautproject.data.remote.networkmodel.UserResponse
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class UserActivity : AppCompatActivity() {
+class GHRepoActivity : AppCompatActivity() {
 
-    lateinit var recyclerView: RecyclerView
-    lateinit var loader: ProgressBar
-    lateinit var errorMassage: TextView
-    private val userViewModel: UserViewModel by viewModels()
-    lateinit var userAdapter: UserAdapter
-    private var userList = mutableListOf<User>()
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var loader: ProgressBar
+    private lateinit var errorMassage: TextView
+    private lateinit var ghRepoAdapter: GHRepoAdapter
+    private val ghRepoViewModel: GHRepoViewModel by viewModels()
+    private var ghRepoList = mutableListOf<GHRepo>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_gh_repo)
 
         recyclerView = findViewById(R.id.user_list)
         loader = findViewById(R.id.loader)
@@ -38,7 +35,7 @@ class UserActivity : AppCompatActivity() {
 
         setUpRecyclerView()
         lifecycleScope.launch {
-            userViewModel.user.collect {
+            ghRepoViewModel.user.collect {
                 when (it) {
                     is ApiState.Error -> {
                         errorMassage.visible()
@@ -51,21 +48,21 @@ class UserActivity : AppCompatActivity() {
                         loader.visible()
                     }
 
-                    is ApiState.Success<UserResponse> -> {
+                    is ApiState.Success<List<GHRepo>> -> {
                         loader.gone()
                         errorMassage.gone()
-                        userList.addAll(it.data.items.toMutableList())
-                        userAdapter.notifyDataSetChanged()
+                        ghRepoList.addAll(it.data.toMutableList())
+                        ghRepoAdapter.notifyDataSetChanged()
                     }
                 }
             }
         }
-        userViewModel.getUser()
+        ghRepoViewModel.getUser()
     }
 
     private fun setUpRecyclerView() {
-        userAdapter = UserAdapter(userList)
+        ghRepoAdapter = GHRepoAdapter(ghRepoList)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = userAdapter
+        recyclerView.adapter = ghRepoAdapter
     }
 }

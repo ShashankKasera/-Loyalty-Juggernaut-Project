@@ -1,5 +1,5 @@
 package com.example.loyaltyjuggernautproject.data.remote.networkmodel
 
-data class UserResponse(
-    val items: List<User>
+data class GHRepoData(
+    val items: List<GHRepoResponse>
 )

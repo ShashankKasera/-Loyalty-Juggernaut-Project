@@ -3,10 +3,10 @@ package com.example.loyaltyjuggernautproject.di
 import android.content.Context
 import androidx.room.Room
 import com.example.loyaltyjuggernautproject.core.Constants
-import com.example.loyaltyjuggernautproject.data.UserRepository
-import com.example.loyaltyjuggernautproject.data.UserRepositoryImpl
+import com.example.loyaltyjuggernautproject.data.GHRepoRepository
+import com.example.loyaltyjuggernautproject.data.GHRepoRepositoryImpl
 import com.example.loyaltyjuggernautproject.data.local.Database
-import com.example.loyaltyjuggernautproject.data.local.UserDao
+import com.example.loyaltyjuggernautproject.data.local.GHRepoDao
 import com.example.loyaltyjuggernautproject.data.remote.DataSource
 import dagger.Module
 import dagger.Provides
@@ -35,11 +35,11 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun providePostRequest(retrofit: Retrofit): DataSource = retrofit.create(DataSource::class.java)
+    fun provideDataSource(retrofit: Retrofit): DataSource = retrofit.create(DataSource::class.java)
 
     @Singleton
     @Provides
-    fun provideUserRepository(userRepositoryImpl: UserRepositoryImpl): UserRepository =
+    fun provideGHRepoRepository(userRepositoryImpl: GHRepoRepositoryImpl): GHRepoRepository =
         userRepositoryImpl
 
     @Singleton
@@ -56,5 +56,5 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideUserDao(db: Database): UserDao = db.getUserDao()
+    fun provideGHRepoDao(db: Database): GHRepoDao = db.getGHRepoDao()
 }

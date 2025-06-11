@@ -6,25 +6,24 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.loyaltyjuggernautproject.R
-import com.example.loyaltyjuggernautproject.data.remote.networkmodel.User
 
-class UserAdapter(
-    private val userList: MutableList<User>
-) : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
+class GHRepoAdapter(
+    private val ghRepoList: MutableList<GHRepo>
+) : RecyclerView.Adapter<GHRepoAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.user_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.gh_repo_item, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.tvId.text = userList[position].id.toString()
-        holder.tvName.text = userList[position].name
-        holder.tvUel.text = userList[position].repoURL
+        holder.tvId.text = ghRepoList[position].id.toString()
+        holder.tvName.text = ghRepoList[position].name
+        holder.tvUel.text = ghRepoList[position].repoURL
     }
 
     override fun getItemCount(): Int {
-        return userList.size
+        return ghRepoList.size
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
