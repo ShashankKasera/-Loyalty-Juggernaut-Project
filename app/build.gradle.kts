@@ -1,8 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("com.google.devtools.ksp")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.devtool.ksp)
+    alias(libs.plugins.dagger.hilt)
+    kotlin("kapt")
 }
 
 android {

@@ -7,6 +7,7 @@ import com.example.loyaltyjuggernautproject.core.states.ApiState
 import com.example.loyaltyjuggernautproject.core.states.Result
 import com.example.loyaltyjuggernautproject.core.states.asResult
 import com.example.loyaltyjuggernautproject.data.GHRepoRepository
+import com.example.loyaltyjuggernautproject.ui.ghrepolist.databinding.GHRepoUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,8 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GHRepoViewModel @Inject constructor(
-    private val ghRepoRepository: GHRepoRepository,
-    private val ghRepoListMapper: GHRepoListMapper
+    private val ghRepoRepository: GHRepoRepository, private val ghRepoListMapper: GHRepoListMapper
 ) : ViewModel() {
 
     private val _apiState = MutableStateFlow<ApiState>(ApiState.Loading)
@@ -35,6 +35,8 @@ class GHRepoViewModel @Inject constructor(
 
     private val _searchedGhRepo = MutableStateFlow<List<GHRepo>>(emptyList())
     val searchedGhRepo: StateFlow<List<GHRepo>> = _searchedGhRepo.asStateFlow()
+
+    val ghRepoUiState = GHRepoUiState()
 
     init {
         observeSearch()
@@ -64,19 +66,16 @@ class GHRepoViewModel @Inject constructor(
 
     private fun observeSearch() {
         viewModelScope.launch {
-            _searchQuery
-                .debounce(300)
-                .distinctUntilChanged()
-                .collectLatest { query ->
-                    _searchedGhRepo.value = if (query.isBlank()) {
-                        _allGhRepo
-                    } else {
-                        _allGhRepo.filter {
-                            it.name.contains(query, ignoreCase = true) ||
-                                    it.id.toString().contains(query)
-                        }
+            _searchQuery.debounce(300).distinctUntilChanged().collectLatest { query ->
+                _searchedGhRepo.value = if (query.isBlank()) {
+                    _allGhRepo
+                } else {
+                    _allGhRepo.filter {
+                        it.name.contains(query, ignoreCase = true) || it.id.toString()
+                            .contains(query)
                     }
                 }
+            }
         }
     }
 }

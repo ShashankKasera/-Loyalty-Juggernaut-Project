@@ -11,7 +11,7 @@ import retrofit2.Response
 internal sealed interface Result<out T> {
     data class Success<T>(val data: T, val headers: Headers?) : Result<T>
     data class Error(val exception: Throwable? = null) : Result<Nothing>
-    object Loading : Result<Nothing>
+    data object Loading : Result<Nothing>
 }
 
 internal fun <T> Flow<Response<T>>.asResult(): Flow<Result<T>> {

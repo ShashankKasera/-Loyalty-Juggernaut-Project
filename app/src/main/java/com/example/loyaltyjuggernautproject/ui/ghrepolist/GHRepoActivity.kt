@@ -1,80 +1,94 @@
 package com.example.loyaltyjuggernautproject.ui.ghrepolist
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.loyaltyjuggernautproject.R
-import com.example.loyaltyjuggernautproject.core.gone
 import com.example.loyaltyjuggernautproject.core.states.ApiState
-import com.example.loyaltyjuggernautproject.core.visible
 import com.example.loyaltyjuggernautproject.databinding.ActivityGhRepoBinding
+import com.example.loyaltyjuggernautproject.ui.ghrepodetail.GHRepoDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class GHRepoActivity : AppCompatActivity() {
-    private lateinit var ghRepoAdapter: GHRepoAdapter
-    private lateinit var binding: ActivityGhRepoBinding
+
     private val ghRepoViewModel: GHRepoViewModel by viewModels()
+    private val adapter by lazy {
+        GHRepoAdapter(this, mutableListOf()) { repoUrl ->
+            val intent = Intent(this, GHRepoDetailActivity::class.java).apply {
+                putExtra(getString(R.string.repo_url), repoUrl)
+            }
+            startActivity(intent)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityGhRepoBinding.inflate(layoutInflater)
+
+        val binding = ActivityGhRepoBinding.inflate(layoutInflater).apply {
+            lifecycleOwner = this@GHRepoActivity
+            viewModel = ghRepoViewModel
+            ghRepoUiState = ghRepoViewModel.ghRepoUiState
+            adapter = this@GHRepoActivity.adapter
+        }
+
         setContentView(binding.root)
-
-
         setSupportActionBar(binding.toolbar)
-        binding.etSearch.addTextChangedListener { editable ->
-            val query = editable?.toString()?.trim()
-            ghRepoViewModel.search(query ?: "")
-        }
-
-        setUpRecyclerView()
-        lifecycleScope.launch {
-            ghRepoViewModel.apiState.collect {
-                when (it) {
-                    is ApiState.Error -> {
-                        binding.errorMassage.visible()
-                        binding.errorMassage.text = it.msg
-                        binding.loader.gone()
-                    }
-
-                    ApiState.Loading -> {
-                        binding.errorMassage.gone()
-                        binding.loader.visible()
-                    }
-
-                    ApiState.Success -> {
-                        binding.loader.gone()
-                        binding.errorMassage.gone()
-                    }
-                }
-            }
-        }
         ghRepoViewModel.getUser()
+        observeApiState()
+    }
 
+    private fun observeApiState() {
         lifecycleScope.launch {
-            ghRepoViewModel.searchedGhRepo.collectLatest {
-                if (it.size > 0) {
-                    binding.ghRepoList.visible()
-                    binding.errorMassage.gone()
-                    ghRepoAdapter.updateList(it)
-                } else {
-                    binding.ghRepoList.gone()
-                    binding.errorMassage.visible()
-                    binding.errorMassage.text = getString(R.string.no_data_found)
+            ghRepoViewModel.apiState.collect { state ->
+                when (state) {
+                    is ApiState.Loading -> {
+                        ghRepoViewModel.ghRepoUiState.apply {
+                            progressBarVisibility = true
+                            errorMassageVisibility = false
+                        }
+                    }
+
+                    is ApiState.Error -> {
+                        ghRepoViewModel.ghRepoUiState.apply {
+                            progressBarVisibility = false
+                            errorMassageVisibility = true
+                            errorMassage = state.msg
+                        }
+                    }
+
+                    is ApiState.Success -> {
+                        ghRepoViewModel.ghRepoUiState.apply {
+                            progressBarVisibility = false
+                            errorMassageVisibility = false
+                            observeSearchResults()
+                        }
+                    }
                 }
             }
         }
     }
 
-    private fun setUpRecyclerView() {
-        ghRepoAdapter = GHRepoAdapter(this, ghRepoViewModel.searchedGhRepo.value.toMutableList())
-        binding.ghRepoList.layoutManager = LinearLayoutManager(this)
-        binding.ghRepoList.adapter = ghRepoAdapter
+    private fun observeSearchResults() {
+        lifecycleScope.launch {
+            ghRepoViewModel.searchedGhRepo.collectLatest { list ->
+                ghRepoViewModel.ghRepoUiState.apply {
+                    ghRepoListVisibility = true
+                    if (list.isNotEmpty()) {
+                        errorMassageVisibility = false
+                        ghRepoListVisibility = true
+                        adapter.updateList(list)
+                    } else {
+                        errorMassageVisibility = true
+                        ghRepoListVisibility = false
+                        errorMassage = getString(R.string.no_data_found)
+                    }
+                }
+            }
+        }
     }
 }

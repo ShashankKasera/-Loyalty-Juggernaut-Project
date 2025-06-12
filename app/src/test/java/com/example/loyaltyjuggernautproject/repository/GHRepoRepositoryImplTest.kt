@@ -44,7 +44,7 @@ class GHRepoRepositoryImplTest {
         val updated = cached + mapped
 
         coEvery { ghRepoDao.loadAllGHRepo() } returnsMany listOf(cached, updated)
-        coEvery { dataSource.test() } returns GHRepoData(items = remoteItems)
+        coEvery { dataSource.getGHRepo() } returns GHRepoData(items = remoteItems)
         coEvery { mapper.map(remoteItems) } returns mapped
         coEvery { ghRepoDao.insertAllGHRepo(mapped) } returns Unit
 
@@ -63,7 +63,7 @@ class GHRepoRepositoryImplTest {
         // Given
         val cached = listOf(GHRepoEntity(1, "LocalRepo", "local_url"))
         coEvery { ghRepoDao.loadAllGHRepo() } returns cached
-        coEvery { dataSource.test() } throws java.io.IOException("No internet")
+        coEvery { dataSource.getGHRepo() } throws java.io.IOException("No internet")
 
         // When
         val result = repository.getGHRepo().first()
@@ -77,7 +77,7 @@ class GHRepoRepositoryImplTest {
     fun `getGHRepo throws when no cache and no internet`() = runTest {
         // Given
         coEvery { ghRepoDao.loadAllGHRepo() } returns emptyList()
-        coEvery { dataSource.test() } throws java.io.IOException("No internet")
+        coEvery { dataSource.getGHRepo() } throws java.io.IOException("No internet")
 
         // When
         repository.getGHRepo().first()

@@ -32,7 +32,7 @@ class GHRepoRepositoryImpl @Inject constructor(
 
             try {
                 // Step 3: Try fetching from network
-                val remoteData = dataSource.test().items
+                val remoteData = dataSource.getGHRepo().items
                 val mappedData = ghRepoEntityListMapper.map(remoteData)
 
                 // Step 4: Save to DB

@@ -5,6 +5,17 @@
 
     <data>
 
+        <variable
+            name="adapter"
+            type="com.example.loyaltyjuggernautproject.ui.ghrepolist.GHRepoAdapter" />
+
+        <variable
+            name="viewModel"
+            type="com.example.loyaltyjuggernautproject.ui.ghrepolist.GHRepoViewModel" />
+
+        <variable
+            name="ghRepoUiState"
+            type="com.example.loyaltyjuggernautproject.ui.ghrepolist.databinding.GHRepoUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +35,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:title="@string/loyalty_juggernaut" />
-
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_search"
@@ -69,6 +79,7 @@
                     android:hint="@string/search"
                     android:inputType="textEmailAddress"
                     android:lines="1"
+                    android:onTextChanged="@{(text, start, before, count) -> viewModel.search(text.toString())}"
                     android:textColor="@color/dark_gray"
                     android:textColorHint="@color/dark_gray"
                     android:textSize="14sp"
@@ -84,10 +95,13 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
+            app:ghRepoListAdapter="@{adapter}"
+            app:ghRepoListData="@{ghRepoUiState.ghRepoList}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cv_search"
+            app:visibleOrGone="@{ghRepoUiState.ghRepoListVisibility}"
             tools:itemCount="10"
             tools:listitem="@layout/gh_repo_item" />
 
@@ -95,20 +109,21 @@
             android:id="@+id/loader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibleOrGone="@{ghRepoUiState.progressBarVisibility}" />
 
         <TextView
             android:id="@+id/error_massage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:text="@{ghRepoUiState.errorMassage}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibleOrGone="@{ghRepoUiState.errorMassageVisibility}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
