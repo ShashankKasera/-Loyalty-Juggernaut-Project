@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cv_add_group_member"
+        android:id="@+id/cv_gh_repo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"

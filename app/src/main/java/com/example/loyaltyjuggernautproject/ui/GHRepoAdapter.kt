@@ -1,9 +1,11 @@
 package com.example.loyaltyjuggernautproject.ui
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.loyaltyjuggernautproject.R
 
@@ -26,6 +28,12 @@ class GHRepoAdapter(
         holder.tvId.text = context.getString(R.string.id, ghRepoList[position].id.toString())
         holder.tvName.text = context.getString(R.string.name, ghRepoList[position].name)
         holder.tvUel.text = context.getString(R.string.repoURL, ghRepoList[position].repoURL)
+
+        holder.cvGHRepo.setOnClickListener {
+            val intent = Intent(context, RepoDetailActivity::class.java)
+            intent.putExtra(context.getString(R.string.repo_url), ghRepoList[position].repoURL)
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -36,5 +44,6 @@ class GHRepoAdapter(
         val tvId: TextView = itemView.findViewById(R.id.tv_id)
         val tvName: TextView = itemView.findViewById(R.id.tv_name)
         val tvUel: TextView = itemView.findViewById(R.id.tv_url)
+        val cvGHRepo: CardView = itemView.findViewById(R.id.cv_gh_repo)
     }
 }
