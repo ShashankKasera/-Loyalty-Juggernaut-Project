@@ -1,4 +1,4 @@
-package com.example.loyaltyjuggernautproject.ui
+package com.example.loyaltyjuggernautproject.ui.ghrepolist
 
 import com.example.loyaltyjuggernautproject.core.Mapper
 import com.example.loyaltyjuggernautproject.core.NullableInputListMapper

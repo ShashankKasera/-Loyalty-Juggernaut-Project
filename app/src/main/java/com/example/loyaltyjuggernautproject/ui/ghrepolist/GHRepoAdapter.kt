@@ -1,4 +1,4 @@
-package com.example.loyaltyjuggernautproject.ui
+package com.example.loyaltyjuggernautproject.ui.ghrepolist
 
 import android.content.Intent
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.loyaltyjuggernautproject.R
+import com.example.loyaltyjuggernautproject.ui.ghrepodetail.GHRepoDetailActivity
 
 class GHRepoAdapter(
     private val context: GHRepoActivity, private val ghRepoList: MutableList<GHRepo>
@@ -30,7 +31,7 @@ class GHRepoAdapter(
         holder.tvUel.text = context.getString(R.string.repoURL, ghRepoList[position].repoURL)
 
         holder.cvGHRepo.setOnClickListener {
-            val intent = Intent(context, RepoDetailActivity::class.java)
+            val intent = Intent(context, GHRepoDetailActivity::class.java)
             intent.putExtra(context.getString(R.string.repo_url), ghRepoList[position].repoURL)
             context.startActivity(intent)
         }

@@ -16,10 +16,10 @@
         android:theme="@style/Theme.LoyaltyJuggernautProject"
         tools:targetApi="31">
         <activity
-            android:name=".ui.RepoDetailActivity"
+            android:name=".ui.ghrepodetail.GHRepoDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.GHRepoActivity"
+            android:name=".ui.ghrepolist.GHRepoActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.LoyaltyJuggernautProject">

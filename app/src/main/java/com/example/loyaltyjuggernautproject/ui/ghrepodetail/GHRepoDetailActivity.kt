@@ -1,4 +1,4 @@
-package com.example.loyaltyjuggernautproject.ui
+package com.example.loyaltyjuggernautproject.ui.ghrepodetail
 
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.loyaltyjuggernautproject.R
 import com.example.loyaltyjuggernautproject.core.EMPTY
 
-class RepoDetailActivity : AppCompatActivity() {
+class GHRepoDetailActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
     private lateinit var loader: ProgressBar

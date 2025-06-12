@@ -1,19 +1,16 @@
-package com.example.loyaltyjuggernautproject.ui
+package com.example.loyaltyjuggernautproject.ui.ghrepolist
 
 import android.os.Bundle
-import android.widget.EditText
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.loyaltyjuggernautproject.R
 import com.example.loyaltyjuggernautproject.core.gone
 import com.example.loyaltyjuggernautproject.core.states.ApiState
 import com.example.loyaltyjuggernautproject.core.visible
+import com.example.loyaltyjuggernautproject.databinding.ActivityGhRepoBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -21,23 +18,19 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class GHRepoActivity : AppCompatActivity() {
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var loader: ProgressBar
-    private lateinit var errorMassage: TextView
-    private lateinit var etSearch: EditText
+
     private lateinit var ghRepoAdapter: GHRepoAdapter
+    private lateinit var binding: ActivityGhRepoBinding
     private val ghRepoViewModel: GHRepoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gh_repo)
+        binding = ActivityGhRepoBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        recyclerView = findViewById(R.id.user_list)
-        loader = findViewById(R.id.loader)
-        errorMassage = findViewById(R.id.error_massage)
-        etSearch = findViewById(R.id.et_search)
 
-        etSearch.addTextChangedListener { editable ->
+
+        binding.etSearch.addTextChangedListener { editable ->
             val query = editable?.toString()?.trim()
             ghRepoViewModel.search(query ?: "")
         }
@@ -47,19 +40,19 @@ class GHRepoActivity : AppCompatActivity() {
             ghRepoViewModel.apiState.collect {
                 when (it) {
                     is ApiState.Error -> {
-                        errorMassage.visible()
-                        errorMassage.text = it.msg
-                        loader.gone()
+                        binding.errorMassage.visible()
+                        binding.errorMassage.text = it.msg
+                        binding.loader.gone()
                     }
 
                     ApiState.Loading -> {
-                        errorMassage.gone()
-                        loader.visible()
+                        binding.errorMassage.gone()
+                        binding.loader.visible()
                     }
 
                     ApiState.Success -> {
-                        loader.gone()
-                        errorMassage.gone()
+                        binding.loader.gone()
+                        binding.errorMassage.gone()
                     }
                 }
             }
@@ -69,13 +62,13 @@ class GHRepoActivity : AppCompatActivity() {
         lifecycleScope.launch {
             ghRepoViewModel.searchedGhRepo.collectLatest {
                 if (it.size > 0) {
-                    recyclerView.visible()
-                    errorMassage.gone()
+                    binding.ghRepoList.visible()
+                    binding.errorMassage.gone()
                     ghRepoAdapter.updateList(it)
                 } else {
-                    recyclerView.gone()
-                    errorMassage.visible()
-                    errorMassage.text = getString(R.string.no_data_found)
+                    binding.ghRepoList.gone()
+                    binding.errorMassage.visible()
+                    binding.errorMassage.text = getString(R.string.no_data_found)
                 }
             }
         }
@@ -84,7 +77,7 @@ class GHRepoActivity : AppCompatActivity() {
 
     private fun setUpRecyclerView() {
         ghRepoAdapter = GHRepoAdapter(this, ghRepoViewModel.searchedGhRepo.value.toMutableList())
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = ghRepoAdapter
+        binding.ghRepoList.layoutManager = LinearLayoutManager(this)
+        binding.ghRepoList.adapter = ghRepoAdapter
     }
 }
