@@ -17,8 +17,6 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class GHRepoActivity : AppCompatActivity() {
-
-
     private lateinit var ghRepoAdapter: GHRepoAdapter
     private lateinit var binding: ActivityGhRepoBinding
     private val ghRepoViewModel: GHRepoViewModel by viewModels()
@@ -29,7 +27,7 @@ class GHRepoActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-
+        setSupportActionBar(binding.toolbar)
         binding.etSearch.addTextChangedListener { editable ->
             val query = editable?.toString()?.trim()
             ghRepoViewModel.search(query ?: "")
@@ -72,7 +70,6 @@ class GHRepoActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 
     private fun setUpRecyclerView() {

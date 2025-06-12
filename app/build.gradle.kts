@@ -51,6 +51,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
 
     //room
     implementation(libs.androidx.room.runtime)
@@ -74,4 +77,5 @@ dependencies {
     //retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    testImplementation(kotlin("test"))
 }

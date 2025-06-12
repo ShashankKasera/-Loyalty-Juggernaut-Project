@@ -1,8 +1,9 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.LoyaltyJuggernautProject" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimaryVariant">#FFBB86FC</item>
-        <item name="colorPrimary">#FF6200EE</item>
-        <item name="colorPrimaryDark">#FF3700B3</item>
+
+    <style name="Theme.LoyaltyJuggernautProject" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorOnPrimary">@color/white</item>
     </style>
 </resources>
